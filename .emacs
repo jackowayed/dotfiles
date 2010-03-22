@@ -68,7 +68,19 @@
       (load-file "~/.emacs.d/twilight-emacs/color-theme-twilight.el")
       (color-theme-twilight)
 ))
+;; (if window-system
+;;     (progn
+;;       (global-font-lock-mode 1)
+;;       (require 'color-theme)
+;;       (color-theme-initialize)
+;;       (custom-color)
+;; ;;      (load-file "~/.elisp/color-theme-github.el")
+;; ;      (load-file "~/.emacs.d/twilight-emacs/color-theme-twilight.el")
 
+;; ))
+(require 'color-theme)
+(color-theme-initialize)
+(custom-color)
 
 ;;http://gist.github.com/19554
 (defvar user-temporary-file-directory
@@ -106,7 +118,7 @@
 (autoload 'markdown-mode "markdown-mode.el"
 "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
-(cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+(cons '("\\.md" . markdown-mode) auto-mode-alist))
 
 ;; Remove splash screen
 (setq inhibit-splash-screen t)
@@ -125,9 +137,6 @@
 (autoload 'magit-status "magit" nil t)
 (global-set-key "\C-ci" 'magit-status)
 
-(defun word-count-race nil "Keep your writing on track by getting minutely word counts"
-  (run-at-time nil 60 'word-count))
-
 (require 'open-file-in-github)
 (transient-mark-mode)
 
@@ -136,3 +145,37 @@
 
 ;no system beep
 (setq visible-bell t)
+
+; http://stackoverflow.com/questions/93415/maximizing-an-emacs-frame-to-just-one-monitor-with-elisp
+(defun toggle-fullscreen ()
+  "toggles whether the currently selected frame consumes the entire display or is decorated with a window border"
+  (interactive)
+  (let ((f (selected-frame)))
+    (modify-frame-parameters f `((fullscreen . ,(if (eq nil (frame-parameter f 'fullscreen)) 'fullboth nil))))))
+
+(global-set-key (kbd "<f4>") 'toggle-fullscreen)
+
+(require 'latex-repl)
+
+(setq auto-mode-alist
+      (append '(("\\.latex$" . latex-mode)) auto-mode-alist))
+
+(require 'word-count-race)
+
+;; Kills all them buffers except scratch
+;; optained from http://www.chrislott.org/geek/emacs/dotemacs.html
+(defun nuke-all-buffers ()
+  "kill all buffers, leaving *scratch* only"
+  (interactive)
+  (mapcar (lambda (x) (kill-buffer x))
+	  (buffer-list))
+  (delete-other-windows))
+
+(require 'clojure-mode)
+
+
+;python-mode
+(setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
+(setq interpreter-mode-alist (cons '("python" . python-mode)
+				   interpreter-mode-alist))
+(autoload 'python-mode "python-mode" "Python editing mode." t)
