@@ -59,28 +59,31 @@
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
 
-(if window-system
-    (progn
-      (global-font-lock-mode 1)
-      (require 'color-theme)
-      ;(color-theme-initialize)
-;;      (load-file "~/.elisp/color-theme-github.el")
-      (load-file "~/.emacs.d/twilight-emacs/color-theme-twilight.el")
-      (color-theme-twilight)
-))
+
 ;; (if window-system
 ;;     (progn
 ;;       (global-font-lock-mode 1)
 ;;       (require 'color-theme)
 ;;       (color-theme-initialize)
-;;       (custom-color)
 ;; ;;      (load-file "~/.elisp/color-theme-github.el")
-;; ;      (load-file "~/.emacs.d/twilight-emacs/color-theme-twilight.el")
-
+;;       (load-file "~/.emacs.d/twilight-emacs/color-theme-twilight.el")
+;;       (color-theme-twilight)
 ;; ))
-(require 'color-theme)
-(color-theme-initialize)
-(custom-color)
+(if window-system
+    (progn
+      (global-font-lock-mode 1)
+      (setq load-path (cons "~/.emacs.d/color-theme-6.6.0" load-path))
+      (require 'color-theme)
+      (color-theme-initialize)
+      (require 'custom-color)
+      (custom-color)
+;;      (load-file "~/.elisp/color-theme-github.el")
+;      (load-file "~/.emacs.d/twilight-emacs/color-theme-twilight.el")
+
+))
+;; (require 'color-theme)
+;; (color-theme-initialize)
+;; (custom-color)
 
 ;;http://gist.github.com/19554
 (defvar user-temporary-file-directory
@@ -179,3 +182,5 @@
 (setq interpreter-mode-alist (cons '("python" . python-mode)
 				   interpreter-mode-alist))
 (autoload 'python-mode "python-mode" "Python editing mode." t)
+
+(tool-bar-mode -1)
