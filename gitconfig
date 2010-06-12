@@ -1,0 +1,35 @@
+[github]
+	user = jackowayed
+	token = cac83c85d84cca62179f721cc6f175cf
+[alias]
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff
+    dfc = diff --cached
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+#Highlight whitespace in diffs
+
+[color]
+      ui = true
+[color "diff"]
+      whitespace = red reverse
+[core]
+      whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[user]
+	name = Daniel Jackoway
+	email = danjdel@gmail.com
