@@ -8,6 +8,16 @@
     co = checkout
     df = diff
     dfc = diff --cached
+    b = branch -a -v
+[core]
+	editor = emacs -nw
+[push]
+	default = current
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = auto
 [color "branch"]
     current = yellow reverse
     local = yellow
@@ -17,19 +27,12 @@
     frag = magenta bold
     old = red bold
     new = green bold
+    whitespace = red reverse
 [color "status"]
     added = yellow
     changed = green
     untracked = cyan
 
-#Highlight whitespace in diffs
-
-[color]
-      ui = true
-[color "diff"]
-      whitespace = red reverse
-[core]
-      whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [user]
 	name = Daniel Jackoway
 	email = danjdel@gmail.com
