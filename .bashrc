@@ -103,8 +103,7 @@ alias g='git'
 #source ~/autojump.sh
 
 source /etc/profile
-source ~/programming/shell/cd_to_root/root.bash
-source ~/programming/ruby/ssh/sshmarks.bash
+source ~/code/shell/cd-to-root/root.bash
 
 #http://gist.github.com/132456
 #defunkt rocks
@@ -130,5 +129,14 @@ function tweet {
 } 
 
 export TYRANT_MANAGER_HOME=~/programming/sevenscale/tyrant
-PATH=$PATH:/opt/nginx/sbin
+PATH=$PATH:/opt/nginx/sbin:~/code/android/sdk/tools
 export PATH
+# Get the aliases and functions
+
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+
+
+PS1="[\\u:\\w]$ "
+
