@@ -21,7 +21,7 @@ plugins=(git) #brew rails)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/opt/nginx/sbin:/Users/daniel/code/android/sdk/tools:/Users/daniel/.gem/ruby/1.8/bin
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/opt/nginx/sbin:/Users/daniel/code/android/sdk/tools:/Users/daniel/.gem/ruby/1.8/bin:/Users/daniel/.jruby/bin
 
 #autojump
 #Copyright Joel Schaerer 2008, 2009
