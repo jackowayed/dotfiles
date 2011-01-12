@@ -1,6 +1,5 @@
 [github]
 	user = jackowayed
-	token = cac83c85d84cca62179f721cc6f175cf
 [alias]
     st = status -sb
     ci = commit
