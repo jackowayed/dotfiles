@@ -16,12 +16,12 @@ export ZSH_THEME="macovsky"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git) #brew rails)
+plugins=(git) #brew) #rails)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/opt/nginx/sbin:/Users/daniel/code/android/sdk/tools:/Users/daniel/.gem/ruby/1.8/bin:/Users/daniel/.jruby/bin
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/opt/nginx/sbin:/Users/daniel/code/android/sdk/tools:/Users/daniel/.jruby/bin:/Users/daniel/bin
 
 #autojump
 #Copyright Joel Schaerer 2008, 2009
@@ -52,4 +52,20 @@ alias jumpstat="autojump --stat"
 function j { local new_path="$(autojump $@)";if [ -n "$new_path" ]; then echo -e "\\033[31m${new_path}\\033[0m"; cd "$new_path";fi }
 
 
-alias n1="emulator -avd nexus"
+alias n1="emulator -avd nexus -logcat ."
+alias froyo="emulator -avd froyo -logcat ."
+
+alias edge_ruboto="ruby -rubygems ~/code/android/ruboto-core/bin/ruboto"
+
+alias e="emacs"
+alias f="say finished"
+
+export EC2_HOME=~/.ec2
+export PATH=$PATH:$EC2_HOME/bin
+export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home/
+
+CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.1.0/clojure-contrib.jar
+
+source .zshprivate
+
+if [[ -s /Users/daniel/.rvm/scripts/rvm ]] ; then source /Users/daniel/.rvm/scripts/rvm ; fi

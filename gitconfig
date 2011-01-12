@@ -2,15 +2,17 @@
 	user = jackowayed
 	token = cac83c85d84cca62179f721cc6f175cf
 [alias]
-    st = status
+    st = status -sb
     ci = commit
     br = branch
     co = checkout
     df = diff
     dfc = diff --cached
     b = branch -a -v
+    msg = commit --allow-empty -m
 [core]
 	editor = emacs -nw
+	excludesfile = /Users/daniel/.gitignore
 [push]
 	default = current
 [color]
