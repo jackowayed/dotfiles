@@ -57,7 +57,8 @@ alias froyo="emulator -avd froyo -logcat ."
 
 alias edge_ruboto="ruby -rubygems ~/code/android/ruboto-core/bin/ruboto"
 
-alias e="emacs"
+alias e="emacsclient -n"
+alias em="emacs"
 alias f="say finished"
 
 export EC2_HOME=~/.ec2
