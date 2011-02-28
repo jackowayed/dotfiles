@@ -10,7 +10,7 @@
     b = branch -a -v
     msg = commit --allow-empty -m
 [core]
-	editor = emacs -nw
+	editor = emacs -nw -q
 	excludesfile = /Users/daniel/.gitignore
 [push]
 	default = current
