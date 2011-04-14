@@ -7,6 +7,7 @@
     co = checkout
     df = diff
     dfc = diff --cached
+    dfw = diff --word-diff
     b = branch -a -v
     msg = commit --allow-empty -m
 [core]
