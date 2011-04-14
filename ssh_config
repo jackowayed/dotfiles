@@ -1,0 +1,22 @@
+Host myth
+	HostName myth.stanford.edu
+
+Host corn
+	HostName corn.stanford.edu
+
+Host myth corn *.stanford.edu
+	User jackoway
+	GSSAPIKeyExchange yes
+	GSSAPIAuthentication yes
+	GSSAPIDelegateCredentials yes
+
+Host vps
+	HostName vps.danieljackoway.com
+
+Host cs1u
+  HostKeyAlias cs1u
+  Hostname 208.109.207.90
+  User daniel
+  Port 22Host *.stanford.edu
+         GSSAPIDelegateCredentials yes
+         GSSAPIAuthentication yes
