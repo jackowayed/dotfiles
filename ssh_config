@@ -12,11 +12,3 @@ Host myth corn *.stanford.edu
 
 Host vps
 	HostName vps.danieljackoway.com
-
-Host cs1u
-  HostKeyAlias cs1u
-  Hostname 208.109.207.90
-  User daniel
-  Port 22Host *.stanford.edu
-         GSSAPIDelegateCredentials yes
-         GSSAPIAuthentication yes
