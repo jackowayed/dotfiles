@@ -21,7 +21,7 @@ plugins=(git) #brew) #rails)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/opt/nginx/sbin:/Users/daniel/code/android/sdk/tools:/Users/daniel/.jruby/bin:/Users/daniel/bin
+export PATH=/Users/daniel/Downloads/adt-bundle-mac-x86_64-20130514/sdk/tools:/Users/daniel/Downloads/adt-bundle-mac-x86_64-20130514/sdk/platform-tools:/Users/daniel/Downloads/adt-bundle-mac-x86_64-20130514/sdk/build-tools/android-4.2.2:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/opt/nginx/sbin:/Users/daniel/code/android/sdk/tools:/Users/daniel/.jruby/bin:/Users/daniel/bin:/usr/local/Cellar/python/2.7/bin
 
 #autojump
 #Copyright Joel Schaerer 2008, 2009
@@ -64,9 +64,14 @@ alias f="say finished"
 export EC2_HOME=~/.ec2
 export PATH=$PATH:$EC2_HOME/bin
 export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home/
+export GOPATH=~/.golibs/
+
 
 CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.1.0/clojure-contrib.jar
 
-source .zshprivate
+source ~/.zshprivate
 
 if [[ -s /Users/daniel/.rvm/scripts/rvm ]] ; then source /Users/daniel/.rvm/scripts/rvm ; fi
+
+alias ori="~/code/ori/build/ori/ori"
+alias orifs="~/code/ori/build/orifs/orifs"

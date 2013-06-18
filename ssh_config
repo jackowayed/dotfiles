@@ -4,11 +4,26 @@ Host myth
 Host corn
 	HostName corn.stanford.edu
 
-Host myth corn *.stanford.edu
+Host pup
+	HostName pup.stanford.edu
+
+Host myth corn pup *.stanford.edu
 	User jackoway
 	GSSAPIKeyExchange yes
 	GSSAPIAuthentication yes
 	GSSAPIDelegateCredentials yes
 
+Host ec2
+  User ubuntu
+  IdentityFile ~/afs/144/ec2/credential/144.pem
+  HostName 107.23.37.86
+
 Host vps
 	HostName vps.danieljackoway.com
+
+Host vm
+     Hostname 192.168.247.128
+     User user
+
+ControlMaster auto
+ControlPath /tmp/ssh_mux_%h_%p_%r
