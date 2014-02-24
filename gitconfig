@@ -11,6 +11,7 @@
     b = branch -a -v
     msg = commit --allow-empty -m
     pl = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+    pr = "pull --rebase"
 
 [core]
 	editor = emacs -nw -q
@@ -39,4 +40,4 @@
 
 [user]
 	name = Daniel Jackoway
-	email = danjdel@gmail.com
+	email = commits@danieljackoway.com

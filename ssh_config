@@ -13,17 +13,29 @@ Host myth corn pup *.stanford.edu
 	GSSAPIAuthentication yes
 	GSSAPIDelegateCredentials yes
 
-Host ec2
-  User ubuntu
-  IdentityFile ~/afs/144/ec2/credential/144.pem
-  HostName 107.23.37.86
+Host sing
+     HostName sing.stanford.edu
+     User jackoway
+Host anyware
+     HostName anyware.stanford.edu
+     User jackoway
+Host walrus
+     HostName walrus.stanford.edu
+     User jackoway
 
 Host vps
 	HostName vps.danieljackoway.com
 
-Host vm
-     Hostname 192.168.247.128
-     User user
+Host dj.stanford.edu
+     User daniel
 
-ControlMaster auto
-ControlPath /tmp/ssh_mux_%h_%p_%r
+Host vm
+  HostName 192.168.50.4
+  User vagrant
+  Port 22
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /Users/daniel/.vagrant.d/insecure_private_key
+  IdentitiesOnly yes
+  LogLevel FATAL

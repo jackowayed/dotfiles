@@ -57,6 +57,7 @@ alias froyo="emulator -avd froyo -logcat ."
 
 alias edge_ruboto="ruby -rubygems ~/code/android/ruboto-core/bin/ruboto"
 
+alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 alias e="emacsclient -n"
 alias em="emacs"
 alias f="say finished"
@@ -64,8 +65,10 @@ alias f="say finished"
 export EC2_HOME=~/.ec2
 export PATH=$PATH:$EC2_HOME/bin
 export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home/
-export GOPATH=~/.golibs/
-
+export GOPATH=~/code/go
+export PATH=$PATH:$GOPATH/bin
+export GOROOT=`go env GOROOT`
+export PATH=$PATH:$GOROOT/bin
 
 CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.1.0/clojure-contrib.jar
 
@@ -73,5 +76,6 @@ source ~/.zshprivate
 
 if [[ -s /Users/daniel/.rvm/scripts/rvm ]] ; then source /Users/daniel/.rvm/scripts/rvm ; fi
 
-alias ori="~/code/ori/build/ori/ori"
-alias orifs="~/code/ori/build/orifs/orifs"
+function sing() {
+  cd ~/code/sing
+}
