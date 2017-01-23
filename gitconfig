@@ -12,6 +12,7 @@
     msg = commit --allow-empty -m
     pl = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
     pr = "pull --rebase"
+    wip = commit -nm
 
 [core]
 	editor = emacs -nw -q
