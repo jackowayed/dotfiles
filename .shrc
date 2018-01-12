@@ -1,0 +1,12 @@
+ulimit -n 4096
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION="cpp"
+export DISABLE_WV2=1
+export DISABLE_MACROS=1
+
+export PATH="$PATH":~/android-sdk-macosx/tools:
+export PATH="$PATH":~/android-sdk-macosx/platform-tools:
+export PATH="$PATH":~/android-ndk-r10d
+export PATH="$PATH":~/src/quip/android/tools
+export ANDROID_NDK="${HOME}/android-ndk-r10d/"
+#export ANDROID_SERIAL=ZX1G325RMB
+export QUIP_SOURCE_ROOT=~/src/quip
