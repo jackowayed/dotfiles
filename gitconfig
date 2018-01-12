@@ -3,7 +3,7 @@
 [alias]
     st = status -sb
     ci = commit
-    br = branch
+    br = branch --sort=-committerdate
     co = checkout
     df = diff
     dfc = diff --cached
@@ -11,14 +11,20 @@
     b = branch -a -v
     msg = commit --allow-empty -m
     pl = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+    gl = "log --graph --pretty=format:'https://github.com/quip/quip/commit/%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+    link = "log --graph --pretty=format:'https://github.com/quip/quip/commit/%Cred%h%Creset %s' -n 1"
     pr = "pull --rebase"
     wip = commit -nm
+    fast = commit -anm "fast"
+    brs = branch
+    fixup = commit --amend --no-edit
+    melog = log --author daniel
 
 [core]
 	editor = emacs -nw -q
 	excludesfile = /Users/daniel/.gitignore
 [push]
-	default = current
+	default = upstream
 [color]
 	diff = auto
 	status = auto
@@ -41,4 +47,4 @@
 
 [user]
 	name = Daniel Jackoway
-	email = commits@danieljackoway.com
+	email = daniel@quip.com
