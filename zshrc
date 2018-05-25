@@ -24,7 +24,7 @@ alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 alias e="emacsclient -n"
 alias em="emacs"
 alias f="say finished"
-alias ghash="git log -n 1 --pretty=format:'%h' | pbcopy"
+alias ghash="git log -n1 --pretty=format:'%h' | pbcopy"
 
 CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.1.0/clojure-contrib.jar
 
@@ -32,3 +32,5 @@ PATH=$PATH:~/bin
 
 source ~/.zshprivate
 alias glink="git --no-pager log --graph --pretty=format:'https://github.com/quip/quip/commit/%h %s' -n 1 | cut -c 3- | tee >&2 | pbcopy"
+
+[ -s "/Users/danieljackoway/.scm_breeze/scm_breeze.sh" ] && source "/Users/danieljackoway/.scm_breeze/scm_breeze.sh"
