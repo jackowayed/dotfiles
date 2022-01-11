@@ -22,16 +22,6 @@ end)
 theEventTap:start()
 
 -------------------------------------------------------------------
--- ControlEscape
---
--- Neat little plug to allow me to use the CONTROL key (which is
--- actually my CAPSLOCK key, after mapping it using the standard
--- Mac keyboard preferences) to mimic the ESCAPE key.
--------------------------------------------------------------------
-theControlEscape = hs.loadSpoon('ControlEscape')
-theControlEscape:start()
-
--------------------------------------------------------------------
 -- Vim Mode
 --
 -- Not sure I like this one... but I'm still trying it out.
@@ -421,3 +411,12 @@ launchMode:bind({}, ',',  function() leaveMode() end)
 launchMode:bind({}, '.',  function() leaveMode() end)
 launchMode:bind({}, '/',  function() leaveMode() end)
 
+
+
+
+hs.loadSpoon("ShiftIt")
+spoon.ShiftIt:bindHotkeys({
+  left = {{ 'alt' }, 'f' },
+  right = {{ 'alt' }, 'j' },
+  maximum = {{ 'alt' }, 'h' },
+})
