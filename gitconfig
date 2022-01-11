@@ -42,3 +42,5 @@
 [user]
 	name = Daniel Jackoway
 	email = commits@danieljackoway.com
+[init]
+	defaultBranch = main
