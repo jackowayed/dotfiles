@@ -325,7 +325,7 @@ end
 -- Enters launch mode. The bulk of this is geared toward
 -- showing a big ugly window that can't be ignored; the
 -- keyboard is now in launch mode.
-hs.hotkey.bind({ 'ctrl' }, 'space', function()
+hs.hotkey.bind({ 'ctrl', 'alt' }, 'space', function()
   launchMode:enter()
   appLauncherAlertWindow = hs.alert.show('App Launcher Mode', {
     strokeColor = hs.drawing.color.x11.orangered,
@@ -416,7 +416,7 @@ launchMode:bind({}, '/',  function() leaveMode() end)
 
 hs.loadSpoon("ShiftIt")
 spoon.ShiftIt:bindHotkeys({
-  left = {{ 'alt' }, 'f' },
-  right = {{ 'alt' }, 'j' },
-  maximum = {{ 'alt' }, 'h' },
+  left = {{ 'ctrl', 'alt', 'cmd' }, 'left' },
+  right = {{ 'ctrl', 'alt', 'cmd' }, 'right' },
+  maximum = {{ 'ctrl', 'alt', 'cmd' }, 'm' },
 })
