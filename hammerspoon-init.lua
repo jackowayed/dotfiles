@@ -252,7 +252,7 @@ end)
 launchMode:bind({ 'ctrl' }, 'space', function() leaveMode() end)
 
 -- Mapped keys
-launchMode:bind({}, 'c`',  function() switchToApp('Google Chrome.app') end)
+launchMode:bind({}, 'c',  function() switchToApp('Google Chrome.app') end)
 --launchMode:bind({}, 'd',  function() leaveMode(); deepwork() end)
 --launchMode:bind({"shift"}, 'd',  function() leaveMode(); interrogateDeepWorkTimer() end)
 launchMode:bind({}, 'i',  function() switchToApp('Signal.app') end)
