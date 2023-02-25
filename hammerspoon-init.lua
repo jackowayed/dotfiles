@@ -337,7 +337,7 @@ end
 -- Enters launch mode. The bulk of this is geared toward
 -- showing a big ugly window that can't be ignored; the
 -- keyboard is now in launch mode.
-hs.hotkey.bind({ 'ctrl', 'alt' }, 'space', function()
+hs.hotkey.bind({ 'ctrl', }, 'space', function()
   launchMode:enter()
   appLauncherAlertWindow = hs.alert.show('App Launcher Mode', {
     strokeColor = hs.drawing.color.x11.orangered,
@@ -355,22 +355,13 @@ end)
 launchMode:bind({ 'ctrl' }, 'space', function() leaveMode() end)
 
 -- Mapped keys
-launchMode:bind({}, 'c',  function() switchToApp('Google Chrome.app') end)
-launchMode:bind({}, 'd',  function() leaveMode(); deepwork() end)
-launchMode:bind({"shift"}, 'd',  function() leaveMode(); interrogateDeepWorkTimer() end)
-launchMode:bind({}, 'f',  function() switchToApp('Firefox.app') end)
-launchMode:bind({}, 'g',  function() switchToApp('OmniGraffle.app') end)
+launchMode:bind({}, 'c`',  function() switchToApp('Google Chrome.app') end)
+--launchMode:bind({}, 'd',  function() leaveMode(); deepwork() end)
+--launchMode:bind({"shift"}, 'd',  function() leaveMode(); interrogateDeepWorkTimer() end)
 launchMode:bind({}, 'i',  function() switchToApp('Signal.app') end)
-launchMode:bind({}, 'k',  function() switchToApp('Skim.app') end)
-launchMode:bind({}, 'l',  function() switchToApp('VLC.app') end)
-launchMode:bind({}, 'm',  function() switchToApp('Mail.app') end)
-launchMode:bind({}, 'o',  function() switchToApp('Microsoft Outlook.app') end)
-launchMode:bind({}, 'r',  function() switchToApp('Safari') end)
-launchMode:bind({}, 'p',  function() switchToApp('Microsoft Powerpoint.app') end)
 launchMode:bind({}, 's',  function() switchToApp('Slack.app') end)
 launchMode:bind({}, 't',  function() switchToApp('iTerm.app') end)
--- launchMode:bind({}, 'v',  function() switchToApp('VimR.app') end)
-launchMode:bind({}, 'v',  function() switchToApp('MacVim.app') end)
+launchMode:bind({}, 'v',  function() switchToApp('VS Code.app') end)
 launchMode:bind({}, 'w',  function() switchToApp('WhatsApp.app') end)
 launchMode:bind({}, 'z',  function() switchToApp('zoom.us.app') end)
 launchMode:bind({}, '`',  function() hs.reload(); leaveMode() end)
