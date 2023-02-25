@@ -46,8 +46,10 @@ theEventTap:start()
 -- And so on...
 units = {
   right30       = { x = 0.70, y = 0.00, w = 0.30, h = 1.00 },
+  right50       = { x = 0.50, y = 0.00, w = 0.50, h = 1.00 },
   right70       = { x = 0.30, y = 0.00, w = 0.70, h = 1.00 },
   left70        = { x = 0.00, y = 0.00, w = 0.70, h = 1.00 },
+  left50        = { x = 0.00, y = 0.00, w = 0.50, h = 1.00 },
   left30        = { x = 0.00, y = 0.00, w = 0.30, h = 1.00 },
   top50         = { x = 0.00, y = 0.00, w = 1.00, h = 0.50 },
   bot50         = { x = 0.00, y = 0.50, w = 1.00, h = 0.50 },
@@ -146,10 +148,15 @@ function runLayout(layout)
   end
 end
 
+function changeHeight(window, deltaPx)
+  f = window:frame()
+  window:move({x = f.x, y = f.y, w = f.w, h = f.h + deltaPx}, nil, true)
+end
+
 -- All of the mappings for moving the window of the 'current' application
 -- to the right spot. Tries to map 'vim' keys as much as possible, but
 -- deviates to a 'visual' representation when that's not possible.
-mash = { 'shift', 'ctrl', 'cmd' }
+mash = { 'option', 'ctrl', 'cmd' }
 hs.hotkey.bind(mash, 'l', function() hs.window.focusedWindow():move(units.right30,    nil, true) end)
 hs.hotkey.bind(mash, 'h', function() hs.window.focusedWindow():move(units.left70,     nil, true) end)
 hs.hotkey.bind(mash, 'k', function() hs.window.focusedWindow():move(units.top50,      nil, true) end)
@@ -159,6 +166,11 @@ hs.hotkey.bind(mash, '[', function() hs.window.focusedWindow():move(units.upleft
 hs.hotkey.bind(mash, ';', function() hs.window.focusedWindow():move(units.botleft70,  nil, true) end)
 hs.hotkey.bind(mash, "'", function() hs.window.focusedWindow():move(units.botright30, nil, true) end)
 hs.hotkey.bind(mash, 'm', function() hs.window.focusedWindow():move(units.maximum,    nil, true) end)
+hs.hotkey.bind(mash, 'left', function() hs.window.focusedWindow():move(units.left50,    nil, true) end)
+hs.hotkey.bind(mash, 'right', function() hs.window.focusedWindow():move(units.right50,    nil, true) end)
+hs.hotkey.bind(mash, 'u', function() changeHeight(hs.window.focusedWindow(), -150) end)
+hs.hotkey.bind(mash, 'n', function() changeHeight(hs.window.focusedWindow(), 150) end)
+
 
 -- The goal here is to bind mash+0 and mash+9 to the grander layouts
 -- but there's a quick difference depending on whether or not I happen
@@ -414,9 +426,9 @@ launchMode:bind({}, '/',  function() leaveMode() end)
 
 
 
-hs.loadSpoon("ShiftIt")
-spoon.ShiftIt:bindHotkeys({
-  left = {{ 'ctrl', 'alt', 'cmd' }, 'left' },
-  right = {{ 'ctrl', 'alt', 'cmd' }, 'right' },
-  maximum = {{ 'ctrl', 'alt', 'cmd' }, 'm' },
-})
+--hs.loadSpoon("ShiftIt")
+--spoon.ShiftIt:bindHotkeys({
+--  left = {{ 'ctrl', 'alt', 'cmd' }, 'left' },
+--  right = {{ 'ctrl', 'alt', 'cmd' }, 'right' },
+--  maximum = {{ 'ctrl', 'alt', 'cmd' }, 'm' },
+--})
