@@ -256,6 +256,7 @@ launchMode:bind({}, 'c',  function() switchToApp('Google Chrome.app') end)
 --launchMode:bind({}, 'd',  function() leaveMode(); deepwork() end)
 --launchMode:bind({"shift"}, 'd',  function() leaveMode(); interrogateDeepWorkTimer() end)
 launchMode:bind({}, 'i',  function() switchToApp('Signal.app') end)
+launchMode:bind({}, 'q',  function() switchToApp('Quip.app') end)
 launchMode:bind({}, 's',  function() switchToApp('Slack.app') end)
 launchMode:bind({}, 't',  function() switchToApp('iTerm.app') end)
 launchMode:bind({}, 'v',  function() switchToApp('VS Code.app') end)
@@ -280,7 +281,6 @@ launchMode:bind({}, 'j',  function() leaveMode() end)
 launchMode:bind({}, 'n',  function() leaveMode() end)
 
 
-launchMode:bind({}, 'q',  function() leaveMode() end)
 
 
 
