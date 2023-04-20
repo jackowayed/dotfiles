@@ -322,17 +322,14 @@ launchMode:bind({}, '.',  function() leaveMode() end)
 launchMode:bind({}, '/',  function() leaveMode() end)
 
 function showTodo(s)
-  return {
-    ident = hs.alert.show(s, {
+  hs.alert.show(s, {
       strokeWidth = 0,
       radius = 0,
       textSize = 36,
       fadeInDuration = 0,
       fadeOutDuration = 0,
       atScreenEdge = 2
-    }, 'infinite'),
-    s = s
-  }
+    }, 'infinite')
 end
 
 currentTodo = nil
@@ -341,22 +338,24 @@ hs.hotkey.bind(mash, 'd', function()
   noButton = 'Cancel'
   button, entry = hs.dialog.textPrompt('TODO:', '', '', yesButton, noButton)
   if button == yesButton and entry ~= '' then
-    newTodo = showTodo(entry)
     if currentTodo ~= nil then
-      hs.alert.closeSpecific(currentTodo.ident)
-      newTodo.prevTodo = currentTodo
+      hs.alert.closeAll()
     end
-    currentTodo = newTodo
+    showTodo(entry)
+    currentTodo = {
+      prevTodo = currentTodo,
+      s = entry
+    }
   end
 end)
 
 hs.hotkey.bind(mash, 'f', function()
+  hs.alert.closeAll()
   if currentTodo ~= nil then
-    hs.alert.closeAll()
     currentTodo = currentTodo.prevTodo
-    if currentTodo ~= nil then
-      currentTodo.ident = showTodo(currentTodo.s)
-    end
+  end
+  if currentTodo ~= nil then
+    showTodo(currentTodo.s)
   end
 end)
 
