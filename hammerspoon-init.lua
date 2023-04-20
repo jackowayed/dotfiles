@@ -244,7 +244,7 @@ end
 -- Enters launch mode. The bulk of this is geared toward
 -- showing a big ugly window that can't be ignored; the
 -- keyboard is now in launch mode.
-hs.hotkey.bind({ 'ctrl', }, 'space', function()
+hs.hotkey.bind({ 'ctrl', 'cmd' }, 'space', function()
   launchMode:enter()
   appLauncherAlertWindow = hs.alert.show('App Launcher Mode', {
     strokeColor = hs.drawing.color.x11.orangered,
@@ -321,6 +321,44 @@ launchMode:bind({}, ',',  function() leaveMode() end)
 launchMode:bind({}, '.',  function() leaveMode() end)
 launchMode:bind({}, '/',  function() leaveMode() end)
 
+function showTodo(s)
+  return {
+    ident = hs.alert.show(s, {
+      strokeWidth = 0,
+      radius = 0,
+      textSize = 36,
+      fadeInDuration = 0,
+      fadeOutDuration = 0,
+      atScreenEdge = 2
+    }, 'infinite'),
+    s = s
+  }
+end
+
+currentTodo = nil
+hs.hotkey.bind(mash, 'd', function()
+  yesButton = 'TODO'
+  noButton = 'Cancel'
+  button, entry = hs.dialog.textPrompt('TODO:', '', '', yesButton, noButton)
+  if button == yesButton and entry ~= '' then
+    newTodo = showTodo(entry)
+    if currentTodo ~= nil then
+      hs.alert.closeSpecific(currentTodo.ident)
+      newTodo.prevTodo = currentTodo
+    end
+    currentTodo = newTodo
+  end
+end)
+
+hs.hotkey.bind(mash, 'f', function()
+  if currentTodo ~= nil then
+    hs.alert.closeAll()
+    currentTodo = currentTodo.prevTodo
+    if currentTodo ~= nil then
+      currentTodo.ident = showTodo(currentTodo.s)
+    end
+  end
+end)
 
 
 
