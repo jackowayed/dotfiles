@@ -333,10 +333,10 @@ function showTodo(s)
 end
 
 currentTodo = nil
--- Workaround for focus bug
--- https://github.com/Hammerspoon/hammerspoon/issues/3218#issuecomment-1135075699
-hs.application.get("Hammerspoon"):activate()
 hs.hotkey.bind(mash, 'd', function()
+  -- Workaround for focus bug
+  -- https://github.com/Hammerspoon/hammerspoon/issues/3218#issuecomment-1135075699
+  hs.application.get("Hammerspoon"):activate()
   yesButton = 'TODO'
   noButton = 'Cancel'
   button, entry = hs.dialog.textPrompt('TODO:', '', '', yesButton, noButton)
