@@ -362,11 +362,5 @@ hs.hotkey.bind(mash, 'f', function()
   end
 end)
 
-
-
---hs.loadSpoon("ShiftIt")
---spoon.ShiftIt:bindHotkeys({
---  left = {{ 'ctrl', 'alt', 'cmd' }, 'left' },
---  right = {{ 'ctrl', 'alt', 'cmd' }, 'right' },
---  maximum = {{ 'ctrl', 'alt', 'cmd' }, 'm' },
---})
+hs.loadSpoon("BingDaily")
+spoon.BingDaily.uhd_resolution = true
