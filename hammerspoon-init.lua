@@ -267,7 +267,8 @@ function saveTodo(captureChrome)
   noButton = 'Cancel'
   button, entry = hs.dialog.textPrompt('Save TODO:', '', '', yesButton, noButton)
   if button == yesButton and entry ~= '' then
-    res = hs.execute("INCLUDE_CHROME_LINK=" .. tostring(captureChrome) .. [[ ~/bin/save-todo "entry"]])
+    shell = "INCLUDE_CHROME_LINK=" .. tostring(captureChrome) .. [[ ~/bin/save-todo "]] .. entry .. [["]]
+    res = hs.execute(shell)
     --print(res)
   end
 end
