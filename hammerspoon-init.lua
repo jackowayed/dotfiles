@@ -258,6 +258,20 @@ hs.hotkey.bind({ 'ctrl', 'cmd' }, 'space', function()
   }, 'infinite')
 end)
 
+function saveTodo(captureChrome)
+  leaveMode()
+  -- Workaround for focus bug
+  -- https://github.com/Hammerspoon/hammerspoon/issues/3218#issuecomment-1135075699
+  hs.application.get("Hammerspoon"):activate()
+  yesButton = 'TODO'
+  noButton = 'Cancel'
+  button, entry = hs.dialog.textPrompt('Save TODO:', '', '', yesButton, noButton)
+  if button == yesButton and entry ~= '' then
+    res = hs.execute("INCLUDE_CHROME_LINK=" .. tostring(captureChrome) .. [[ ~/bin/save-todo "entry"]])
+    --print(res)
+  end
+end
+
 -- When in launch mode, hitting ctrl+space again leaves it
 launchMode:bind({ 'ctrl' }, 'space', function() leaveMode() end)
 
@@ -273,6 +287,9 @@ launchMode:bind({}, 'v',  function() switchToApp('VS Code.app') end)
 launchMode:bind({}, 'w',  function() switchToApp('WhatsApp.app') end)
 launchMode:bind({}, 'z',  function() switchToApp('zoom.us.app') end)
 launchMode:bind({}, '`',  function() hs.reload(); leaveMode() end)
+launchMode:bind({}, '.',  function() saveTodo(false) end)
+launchMode:bind({}, ',',  function() saveTodo(true) end)
+
 
 -- Unmapped keys
 launchMode:bind({}, 'a',  function() leaveMode() end)
@@ -317,8 +334,6 @@ launchMode:bind({}, ']',  function() leaveMode() end)
 launchMode:bind({}, '\\', function() leaveMode() end)
 launchMode:bind({}, ';',  function() leaveMode() end)
 launchMode:bind({}, "'",  function() leaveMode() end)
-launchMode:bind({}, ',',  function() leaveMode() end)
-launchMode:bind({}, '.',  function() leaveMode() end)
 launchMode:bind({}, '/',  function() leaveMode() end)
 
 function showTodo(s)
@@ -362,5 +377,7 @@ hs.hotkey.bind(mash, 'f', function()
   end
 end)
 
-hs.loadSpoon("BingDaily")
-spoon.BingDaily.uhd_resolution = true
+if hs.spoons.isInstalled("BingDaily") ~= nil then
+  hs.loadSpoon("BingDaily")
+  spoon.BingDaily.uhd_resolution = true
+end 
