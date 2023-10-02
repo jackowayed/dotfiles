@@ -80,6 +80,12 @@ function changeHeight(window, deltaPx)
   window:move({x = f.x, y = f.y, w = f.w, h = f.h + deltaPx}, nil, true)
 end
 
+function reflectHorizontal(window)
+  f = window:frame()
+  screenFrame = window:screen():frame()
+  window:move({x = screenFrame.w - f.x - f.w, y = f.y, w = f.w, h = f.h}, nil, true)
+end
+
 -- All of the mappings for moving the window of the 'current' application
 -- to the right spot. Tries to map 'vim' keys as much as possible, but
 -- deviates to a 'visual' representation when that's not possible.
@@ -97,6 +103,7 @@ hs.hotkey.bind(mash, 'left', function() hs.window.focusedWindow():move(units.lef
 hs.hotkey.bind(mash, 'right', function() hs.window.focusedWindow():move(units.right50,    nil, true) end)
 hs.hotkey.bind(mash, 'u', function() changeHeight(hs.window.focusedWindow(), -150) end)
 hs.hotkey.bind(mash, 'n', function() changeHeight(hs.window.focusedWindow(), 150) end)
+hs.hotkey.bind(mash, 'r', function() reflectHorizontal(hs.window.focusedWindow()) end)
 -- https://stackoverflow.com/a/58662204
 hs.hotkey.bind(mash, 's', function()
   -- get the focused window
