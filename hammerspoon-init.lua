@@ -388,4 +388,29 @@ end)
 if hs.spoons.isInstalled("BingDaily") ~= nil then
   hs.loadSpoon("BingDaily")
   spoon.BingDaily.uhd_resolution = true
-end 
+end
+
+-- Mute audio after ending a Zoom call
+local inZoomCall = false
+local function checkZoomStateTransition()
+  -- https://community.jamf.com/t5/jamf-pro/how-to-check-if-zoom-is-running-a-meeting/m-p/305660#M267341
+  local output, ok, rawTable = hs.execute(
+    "lsof -i 4UDP | grep zoom | awk 'END{print NR}'")
+  if not ok then
+    return
+  end
+  local number = tonumber(output)
+  if number == nil then
+    local log = hs.logger.new('Zoom','info')
+    log.i("Failed to parse lsof: " .. output)
+    return
+  end
+  local newInZoomCall = number > 1
+  if inZoomCall and not newInZoomCall then
+    hs.audiodevice.defaultOutputDevice():setMuted(true)
+  end
+  inZoomCall = newInZoomCall
+end
+
+local zoomMeetingEndTimer = hs.timer.new(46, checkZoomStateTransition)
+zoomMeetingEndTimer:start()
