@@ -392,6 +392,33 @@ end
 
 -- Mute audio after ending a Zoom call
 local inZoomCall = false
+
+local function readOfficeIps()
+  local file = io.open("office-ips.txt", "r")
+  if file == nil then
+    return {}
+  end
+  local ips = {}
+  local log = hs.logger.new('Zoom','info')
+  for line in file:lines() do
+    table.insert(ips, line)
+  end
+  file:close()
+  return ips
+end
+local officeIps = readOfficeIps()
+
+local function isAtOffice()
+  local output, ok, rawTable = hs.execute(
+    "dig whoami.cloudflare ch txt @1.1.1.1 +short")
+  -- check if output is in officeIps
+  for _, ip in ipairs(officeIps) do
+    if output:find(ip) then
+      return true
+    end
+  end
+  return false
+end
 local function checkZoomStateTransition()
   -- https://community.jamf.com/t5/jamf-pro/how-to-check-if-zoom-is-running-a-meeting/m-p/305660#M267341
   local output, ok, rawTable = hs.execute(
@@ -406,11 +433,14 @@ local function checkZoomStateTransition()
     return
   end
   local newInZoomCall = number > 1
-  if inZoomCall and not newInZoomCall then
+  if inZoomCall and not newInZoomCall and isAtOffice() then
     hs.audiodevice.defaultOutputDevice():setMuted(true)
   end
   inZoomCall = newInZoomCall
 end
 
-local zoomMeetingEndTimer = hs.timer.new(46, checkZoomStateTransition)
-zoomMeetingEndTimer:start()
+
+if next(officeIps) ~= nil then
+  local zoomMeetingEndTimer = hs.timer.new(46, checkZoomStateTransition)
+  zoomMeetingEndTimer:start()
+end
