@@ -90,29 +90,31 @@ end
 -- to the right spot. Tries to map 'vim' keys as much as possible, but
 -- deviates to a 'visual' representation when that's not possible.
 mash = { 'option', 'ctrl', 'cmd' }
-hs.hotkey.bind(mash, 'l', function() hs.window.focusedWindow():move(units.right30,    nil, true) end)
-hs.hotkey.bind(mash, 'h', function() hs.window.focusedWindow():move(units.left70,     nil, true) end)
-hs.hotkey.bind(mash, 'k', function() hs.window.focusedWindow():move(units.top50,      nil, true) end)
-hs.hotkey.bind(mash, 'j', function() hs.window.focusedWindow():move(units.bot50,      nil, true) end)
-hs.hotkey.bind(mash, ']', function() hs.window.focusedWindow():move(units.upright30,  nil, true) end)
-hs.hotkey.bind(mash, '[', function() hs.window.focusedWindow():move(units.upleft70,   nil, true) end)
-hs.hotkey.bind(mash, ';', function() hs.window.focusedWindow():move(units.botleft70,  nil, true) end)
-hs.hotkey.bind(mash, "'", function() hs.window.focusedWindow():move(units.botright30, nil, true) end)
-hs.hotkey.bind(mash, 'm', function() hs.window.focusedWindow():move(units.maximum,    nil, true) end)
-hs.hotkey.bind(mash, 'left', function() hs.window.focusedWindow():move(units.left50,    nil, true) end)
-hs.hotkey.bind(mash, 'right', function() hs.window.focusedWindow():move(units.right50,    nil, true) end)
-hs.hotkey.bind(mash, 'u', function() changeHeight(hs.window.focusedWindow(), -150) end)
-hs.hotkey.bind(mash, 'n', function() changeHeight(hs.window.focusedWindow(), 150) end)
-hs.hotkey.bind(mash, 'r', function() reflectHorizontal(hs.window.focusedWindow()) end)
--- https://stackoverflow.com/a/58662204
-hs.hotkey.bind(mash, 's', function()
-  -- get the focused window
+
+function withFocusedWindow(fn)
   local win = hs.window.focusedWindow()
-  -- get the screen where the focused window is displayed, a.k.a. current screen
-  local screen = win:screen()
-  -- compute the unitRect of the focused window relative to the current screen
-  -- and move the window to the next screen setting the same unitRect
-  win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+  if win then fn(win) end
+end
+
+hs.hotkey.bind(mash, 'l', function() withFocusedWindow(function(w) w:move(units.right30,    nil, true) end) end)
+hs.hotkey.bind(mash, 'h', function() withFocusedWindow(function(w) w:move(units.left70,     nil, true) end) end)
+hs.hotkey.bind(mash, 'k', function() withFocusedWindow(function(w) w:move(units.top50,      nil, true) end) end)
+hs.hotkey.bind(mash, 'j', function() withFocusedWindow(function(w) w:move(units.bot50,      nil, true) end) end)
+hs.hotkey.bind(mash, ']', function() withFocusedWindow(function(w) w:move(units.upright30,  nil, true) end) end)
+hs.hotkey.bind(mash, '[', function() withFocusedWindow(function(w) w:move(units.upleft70,   nil, true) end) end)
+hs.hotkey.bind(mash, ';', function() withFocusedWindow(function(w) w:move(units.botleft70,  nil, true) end) end)
+hs.hotkey.bind(mash, "'", function() withFocusedWindow(function(w) w:move(units.botright30, nil, true) end) end)
+hs.hotkey.bind(mash, 'm', function() withFocusedWindow(function(w) w:move(units.maximum,    nil, true) end) end)
+hs.hotkey.bind(mash, 'left', function() withFocusedWindow(function(w) w:move(units.left50,  nil, true) end) end)
+hs.hotkey.bind(mash, 'right', function() withFocusedWindow(function(w) w:move(units.right50, nil, true) end) end)
+hs.hotkey.bind(mash, 'u', function() withFocusedWindow(function(w) changeHeight(w, -150) end) end)
+hs.hotkey.bind(mash, 'n', function() withFocusedWindow(function(w) changeHeight(w, 150) end) end)
+hs.hotkey.bind(mash, 'r', function() withFocusedWindow(function(w) reflectHorizontal(w) end) end)
+hs.hotkey.bind(mash, 's', function()
+  withFocusedWindow(function(win)
+    local screen = win:screen()
+    win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+  end)
 end)
 
 
@@ -285,8 +287,6 @@ launchMode:bind({ 'ctrl' }, 'space', function() leaveMode() end)
 
 -- Mapped keys
 launchMode:bind({}, 'c',  function() switchToApp('Google Chrome.app') end)
---launchMode:bind({}, 'd',  function() leaveMode(); deepwork() end)
---launchMode:bind({"shift"}, 'd',  function() leaveMode(); interrogateDeepWorkTimer() end)
 launchMode:bind({}, 'i',  function() switchToApp('Signal.app') end)
 launchMode:bind({}, 'q',  function() switchToApp('Quip.app') end)
 launchMode:bind({}, 's',  function() switchToApp('Slack.app') end)
@@ -304,11 +304,10 @@ launchMode:bind({}, 'a',  function() leaveMode() end)
 launchMode:bind({}, 'b',  function() leaveMode() end)
 
 
+launchMode:bind({}, 'd',  function() leaveMode() end)
 launchMode:bind({}, 'e',  function() leaveMode() end)
 
-
-launchMode:bind({}, 'h',  function() leaveMode() end)
-
+-- 'h' is bound by work.lua if present; otherwise unbound (no-op in modal)
 launchMode:bind({}, 'j',  function() leaveMode() end)
 
 
@@ -401,26 +400,29 @@ local function readOfficeIps()
   local ips = {}
   local log = hs.logger.new('Zoom','info')
   for line in file:lines() do
-    table.insert(ips, line)
+    if line ~= "" then
+      table.insert(ips, line)
+    end
   end
   file:close()
   return ips
 end
 local officeIps = readOfficeIps()
 
+local zoomLog = hs.logger.new('Zoom','info')
+
 local function isAtOffice()
   local output, ok, rawTable = hs.execute(
     "dig whoami.cloudflare ch txt @1.1.1.1 +short")
-  -- check if output is in officeIps
+  local detectedIp = output:gsub("[%s\"]+", "")
   for _, ip in ipairs(officeIps) do
-    if output:find(ip) then
-      return true
+    if detectedIp == ip then
+      return true, detectedIp
     end
   end
-  return false
+  return false, detectedIp
 end
 local function checkZoomStateTransition()
-  -- https://community.jamf.com/t5/jamf-pro/how-to-check-if-zoom-is-running-a-meeting/m-p/305660#M267341
   local output, ok, rawTable = hs.execute(
     "lsof -i 4UDP | grep zoom | awk 'END{print NR}'")
   if not ok then
@@ -428,19 +430,29 @@ local function checkZoomStateTransition()
   end
   local number = tonumber(output)
   if number == nil then
-    local log = hs.logger.new('Zoom','info')
-    log.i("Failed to parse lsof: " .. output)
+    zoomLog.i("Failed to parse lsof: " .. output)
     return
   end
   local newInZoomCall = number > 1
-  if inZoomCall and not newInZoomCall and isAtOffice() then
-    hs.audiodevice.defaultOutputDevice():setMuted(true)
+  if inZoomCall and not newInZoomCall then
+    local atOffice, detectedIp = isAtOffice()
+    zoomLog.i("Zoom call ended. Detected IP: " .. detectedIp
+      .. " | Office IPs: " .. table.concat(officeIps, ", ")
+      .. " | At office: " .. tostring(atOffice))
+    if atOffice then
+      hs.audiodevice.defaultOutputDevice():setMuted(true)
+      zoomLog.i("Muted audio.")
+    end
   end
   inZoomCall = newInZoomCall
 end
-
 
 if next(officeIps) ~= nil then
   local zoomMeetingEndTimer = hs.timer.new(46, checkZoomStateTransition)
   zoomMeetingEndTimer:start()
 end
+
+-------------------------------------------------------------------
+-- Work-specific config (loaded from ~/.hammerspoon/work.lua if present)
+-------------------------------------------------------------------
+pcall(dofile, os.getenv("HOME") .. "/.hammerspoon/work.lua")
