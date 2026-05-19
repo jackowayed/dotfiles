@@ -412,9 +412,9 @@ local officeIps = readOfficeIps()
 local zoomLog = hs.logger.new('Zoom','info')
 
 local function isAtOffice()
-  local output, ok, rawTable = hs.execute(
-    "dig whoami.cloudflare ch txt @1.1.1.1 +short")
-  local detectedIp = output:gsub("[%s\"]+", "")
+  local output, ok = hs.execute(
+    "curl -s https://1.1.1.1/cdn-cgi/trace | grep -oE 'ip=[0-9.]+' | cut -d= -f2")
+  local detectedIp = output:gsub("%s+", "")
   for _, ip in ipairs(officeIps) do
     if detectedIp == ip then
       return true, detectedIp
@@ -426,6 +426,7 @@ local function checkZoomStateTransition()
   local output, ok, rawTable = hs.execute(
     "lsof -i 4UDP | grep zoom | awk 'END{print NR}'")
   if not ok then
+    zoomLog.i("lsof command failed")
     return
   end
   local number = tonumber(output)
@@ -448,8 +449,11 @@ local function checkZoomStateTransition()
 end
 
 if next(officeIps) ~= nil then
+  zoomLog.i("Starting Zoom mute timer with " .. #officeIps .. " office IPs")
   local zoomMeetingEndTimer = hs.timer.new(46, checkZoomStateTransition)
   zoomMeetingEndTimer:start()
+else
+  zoomLog.i("No office IPs found, Zoom mute timer not started")
 end
 
 -------------------------------------------------------------------
