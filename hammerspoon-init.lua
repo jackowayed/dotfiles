@@ -411,9 +411,24 @@ local officeIps = readOfficeIps()
 
 local zoomLog = hs.logger.new('Zoom','info')
 
+-- Verbose, persistent log for diagnosing Zoom-mute behavior across sleeps/days.
+-- Tail it with:  tail -f ~/.hammerspoon/zoom.log
+local zoomLogPath = os.getenv("HOME") .. "/.hammerspoon/zoom.log"
+local function zoomFileLog(msg)
+  local f = io.open(zoomLogPath, "a")
+  if f == nil then
+    zoomLog.e("Could not open zoom log file: " .. zoomLogPath)
+    return
+  end
+  f:write(os.date("%Y-%m-%d %H:%M:%S") .. " | " .. msg .. "\n")
+  f:close()
+end
+
 local function isAtOffice()
+  -- --max-time guards against hs.execute blocking the main thread if the
+  -- network isn't up yet (e.g. right after a wake from sleep).
   local output, ok = hs.execute(
-    "curl -s https://1.1.1.1/cdn-cgi/trace | grep -oE 'ip=[0-9.]+' | cut -d= -f2")
+    "curl -s --max-time 5 https://1.1.1.1/cdn-cgi/trace | grep -oE 'ip=[0-9.]+' | cut -d= -f2")
   local detectedIp = output:gsub("%s+", "")
   for _, ip in ipairs(officeIps) do
     if detectedIp == ip then
@@ -423,26 +438,47 @@ local function isAtOffice()
   return false, detectedIp
 end
 local function checkZoomStateTransition()
-  local output, ok, rawTable = hs.execute(
+  local output, ok = hs.execute(
     "lsof -i 4UDP | grep zoom | awk 'END{print NR}'")
   if not ok then
+    zoomFileLog("lsof command failed (ok=false) | raw output=" .. tostring(output))
     zoomLog.i("lsof command failed")
     return
   end
   local number = tonumber(output)
   if number == nil then
+    zoomFileLog("could not parse lsof count | raw output=" .. tostring(output))
     zoomLog.i("Failed to parse lsof: " .. output)
     return
   end
   local newInZoomCall = number > 1
+
+  -- Verbose: log the full status on EVERY tick (zoom UDP count + office IP).
+  local atOffice, detectedIp = isAtOffice()
+  zoomFileLog(string.format(
+    "tick | zoomUDP=%d | inCall %s->%s | detectedIP=%s | atOffice=%s",
+    number, tostring(inZoomCall), tostring(newInZoomCall),
+    (detectedIp ~= "" and detectedIp or "(empty)"), tostring(atOffice)))
+
   if inZoomCall and not newInZoomCall then
-    local atOffice, detectedIp = isAtOffice()
     zoomLog.i("Zoom call ended. Detected IP: " .. detectedIp
       .. " | Office IPs: " .. table.concat(officeIps, ", ")
       .. " | At office: " .. tostring(atOffice))
     if atOffice then
-      hs.audiodevice.defaultOutputDevice():setMuted(true)
+      -- pcall so a flaky audiodevice API can never kill the timer; capture the
+      -- real setMuted result + readback so we know if the mute actually took.
+      local okMute, info = pcall(function()
+        local dev = hs.audiodevice.defaultOutputDevice()
+        if dev == nil then return "no default output device" end
+        local setResult = dev:setMuted(true)
+        return string.format("device=%s | setMuted returned=%s | muted now=%s",
+          dev:name(), tostring(setResult), tostring(dev:muted()))
+      end)
+      zoomFileLog("ACTION end-of-call mute | "
+        .. (okMute and info or ("ERROR: " .. tostring(info))))
       zoomLog.i("Muted audio.")
+    else
+      zoomFileLog("end-of-call detected but NOT at office -> no mute")
     end
   end
   inZoomCall = newInZoomCall
@@ -450,10 +486,31 @@ end
 
 if next(officeIps) ~= nil then
   zoomLog.i("Starting Zoom mute timer with " .. #officeIps .. " office IPs")
-  local zoomMeetingEndTimer = hs.timer.new(46, checkZoomStateTransition)
+  zoomFileLog("=== Zoom mute logging started | " .. #officeIps
+    .. " office IPs: " .. table.concat(officeIps, ", ") .. " ===")
+  -- Intentionally global (no `local`): a started timer/watcher held only by a
+  -- chunk-local can be garbage-collected after init.lua finishes running, which
+  -- would make this silently stop firing after a while.
+  zoomMeetingEndTimer = hs.timer.new(46, checkZoomStateTransition)
   zoomMeetingEndTimer:start()
+  -- Log sleep/wake/lock events to the same file so gaps in the tick log can be
+  -- correlated with the machine sleeping (the "runs for days across sleeps" hunch).
+  zoomCaffeinateWatcher = hs.caffeinate.watcher.new(function(eventType)
+    local names = {
+      [hs.caffeinate.watcher.systemDidWake] = "systemDidWake",
+      [hs.caffeinate.watcher.systemWillSleep] = "systemWillSleep",
+      [hs.caffeinate.watcher.systemWillPowerOff] = "systemWillPowerOff",
+      [hs.caffeinate.watcher.screensDidSleep] = "screensDidSleep",
+      [hs.caffeinate.watcher.screensDidWake] = "screensDidWake",
+      [hs.caffeinate.watcher.screensDidLock] = "screensDidLock",
+      [hs.caffeinate.watcher.screensDidUnlock] = "screensDidUnlock",
+    }
+    zoomFileLog("caffeinate: " .. (names[eventType] or ("event " .. tostring(eventType))))
+  end)
+  zoomCaffeinateWatcher:start()
 else
   zoomLog.i("No office IPs found, Zoom mute timer not started")
+  zoomFileLog("No office IPs found, Zoom mute timer NOT started")
 end
 
 -------------------------------------------------------------------
