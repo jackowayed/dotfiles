@@ -1,0 +1,25 @@
+#compdef devc
+
+local -a commands
+commands=(
+  'up:Start the development container'
+  'rebuild:Rebuild the development container'
+  'shell:Open a shell in the development container'
+  'exec:Run a command in the development container'
+)
+
+_arguments -C \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '1:subcommand:->subcommand' \
+  '*::argument:->argument'
+
+case $state in
+  subcommand)
+    _describe 'subcommand' commands
+    ;;
+  argument)
+    # We do not guess at project-specific flags. Falling back to normal zsh
+    # completion still supplies paths after a subcommand.
+    _default
+    ;;
+esac
