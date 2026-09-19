@@ -1,11 +1,23 @@
 #compdef devc
 
+local curcontext="$curcontext" state line
 local -a commands
 commands=(
-  'up:Start the development container'
-  'rebuild:Rebuild the development container'
-  'shell:Open a shell in the development container'
-  'exec:Run a command in the development container'
+  '.:Install the devcontainer template and start it'
+  'up:Start the devcontainer in the current directory'
+  'rebuild:Rebuild the devcontainer (preserves auth volumes)'
+  'down:Stop the devcontainer'
+  'shell:Open a shell in the running container'
+  'exec:Run a command in the container'
+  'upgrade:Upgrade Claude Code to the latest version'
+  'mount:Add a bind mount (host -> container)'
+  'sync:Sync Claude Code sessions from devcontainers to the host'
+  'cp:Copy a path from the container to the host'
+  'template:Copy the devcontainer template to a directory'
+  'destroy:Remove the container, volumes, and image for this project'
+  'self-install:Install the devc command to ~/.local/bin'
+  'update:Update devc to the latest version'
+  'help:Show the devc help message'
 )
 
 _arguments -C \
@@ -18,8 +30,33 @@ case $state in
     _describe 'subcommand' commands
     ;;
   argument)
-    # We do not guess at project-specific flags. Falling back to normal zsh
-    # completion still supplies paths after a subcommand.
-    _default
+    case $words[1] in
+      destroy)
+        _arguments '(-f --force)'{-f,--force}'[skip the confirmation prompt]'
+        ;;
+      mount)
+        _arguments \
+          '1:host path:_files -/' \
+          '2:container path:' \
+          '3:read-only:(--readonly)'
+        ;;
+      sync)
+        _arguments \
+          '--trusted[skip the confirmation prompt]' \
+          '*:project name:->project'
+        if [[ $state == project ]]; then
+          local -a projects
+          projects=(${(f)"$(_call_program projects docker ps -a --filter label=devcontainer.local_folder --format '{{.Label "devcontainer.local_folder"}}' 2>/dev/null)"})
+          projects=(${projects:t})
+          (( ${#projects} )) && _describe 'project' projects
+        fi
+        ;;
+      template|cp)
+        _arguments '*:path:_files'
+        ;;
+      *)
+        _default
+        ;;
+    esac
     ;;
 esac
