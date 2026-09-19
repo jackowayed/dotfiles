@@ -4,6 +4,11 @@ setopt PROMPT_SUBST
 # Tab completion
 #
 
+# Look for personal completion functions next to this file. Add a `_tool` file
+# there (starting with `#compdef tool`) to teach zsh about another command.
+typeset -g DOTFILES_DIR=${${(%):-%N}:A:h}
+fpath=("$DOTFILES_DIR/completions" $fpath)
+
 # Completion module for menuselect keymap
 zmodload -i zsh/complist
 # Don't auto-insert first match; show menu on second tab instead
@@ -14,7 +19,8 @@ setopt auto_menu
 setopt complete_in_word
 # Move cursor to end of word after completing
 setopt always_to_end
-autoload -Uz compinit && compinit -C -d ~/.zcompdump-${HOST}-${ZSH_VERSION}
+# Let compinit refresh its dump when completion files are added or removed.
+autoload -Uz compinit && compinit -d ~/.zcompdump-${HOST}-${ZSH_VERSION}
 # Arrow-key interactive menu when multiple matches exist
 zstyle ':completion:*:*:*:*:*' menu select
 # Case-insensitive, then partial-word, then substring matching
