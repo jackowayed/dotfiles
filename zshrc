@@ -1,6 +1,18 @@
 autoload -U colors && colors
 setopt PROMPT_SUBST
 
+# Colors for ls and completion: must be set before completion setup below,
+# since `list-colors` expands LS_COLORS at definition time.
+# BSD/macOS ls uses CLICOLOR/LSCOLORS; GNU ls and zsh completion use LS_COLORS.
+export CLICOLOR=1
+export LSCOLORS=Exfxcxdxbxegedabagacad
+if (( $+commands[dircolors] )); then
+  eval "$(dircolors -b)"
+else
+  # Fallback so completions still colorize on systems without dircolors (stock macOS/BSD)
+  export LS_COLORS=${LS_COLORS:-'di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'}
+fi
+
 # Tab completion
 #
 
@@ -27,7 +39,8 @@ zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
 # Complete . and .. as directories
 zstyle ':completion:*' special-dirs true
-zstyle ':completion:*' list-colors ''
+# Use LS_COLORS for completion listings (dirs, symlinks, executables, etc.)
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # Color-coded process list for kill completion
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm -w -w"
@@ -52,6 +65,19 @@ zstyle ':vcs_info:git:*' actionformats '%F{yellow}‹%b|%a›%f '
 local return_code="%(?..%F{red}%? ↵%f)"
 PROMPT='%F{green}%~%f ${vcs_info_msg_0_}%B$%b '
 RPROMPT="${return_code}"
+
+# ls alias: use colors to differentiate directories, symlinks, executables, etc.
+# (CLICOLOR/LSCOLORS/LS_COLORS are set at the top of this file.)
+if ls --version >/dev/null 2>&1; then
+  # GNU ls (Linux, or Homebrew coreutils on macOS)
+  alias ls='ls --color=auto'
+elif (( $+commands[gls] )); then
+  # Homebrew coreutils without dircolors in PATH shadowing
+  alias ls='gls --color=auto'
+else
+  # BSD ls (default macOS): -G enables CLICOLOR/LSCOLORS
+  alias ls='ls -G'
+fi
 
 alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 alias e="emacsclient -n"
