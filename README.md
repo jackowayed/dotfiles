@@ -51,13 +51,8 @@ symlink, so that directory doesn't need its own link.
 
 The config calls `/opt/homebrew/bin/brew shellenv`. Install Homebrew there
 (the usual Apple Silicon location), or adjust that line for your machine.
-It also sources `~/.zshprivate` unconditionally. Keep machine-specific settings
-there; create an empty file if you don't have any yet:
-
-```sh
-touch "$HOME/.zshprivate"
-exec zsh
-```
+It also sources `~/.zshprivate` if present, so keep machine-specific settings
+there. The file is optional; no need to create it on a new machine.
 
 ## Hammerspoon
 

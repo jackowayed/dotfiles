@@ -91,5 +91,5 @@ PATH=$PATH:~/bin
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-source ~/.zshprivate
+[[ -r ~/.zshprivate ]] && source ~/.zshprivate
 export PATH="$HOME/.local/bin:$PATH"
