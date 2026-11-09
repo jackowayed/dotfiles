@@ -49,10 +49,10 @@ The config uses zsh's built-in completion and Git prompt support; no Oh My Zsh
 installation is needed. It finds the repo's `completions/` directory through the
 symlink, so that directory doesn't need its own link.
 
-The config calls `/opt/homebrew/bin/brew shellenv`. Install Homebrew there
-(the usual Apple Silicon location), or adjust that line for your machine.
-It also sources `~/.zshprivate` if present, so keep machine-specific settings
-there. The file is optional; no need to create it on a new machine.
+The config loads Homebrew via `brew shellenv` if Homebrew is installed, checking
+the usual Apple Silicon prefix (`/opt/homebrew`) and then `brew` on `PATH`. It
+also sources `~/.zshprivate` if present, so keep machine-specific settings
+there. Both are optional; no setup is needed on a new machine.
 
 ## Hammerspoon
 

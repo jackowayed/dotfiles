@@ -89,7 +89,12 @@ CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.1.0/clojure-contrib.jar
 
 PATH=$PATH:~/bin
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Load Homebrew if installed: Apple Silicon's default prefix, or brew on PATH.
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif (( $+commands[brew] )); then
+  eval "$(brew shellenv)"
+fi
 
 [[ -r ~/.zshprivate ]] && source ~/.zshprivate
 export PATH="$HOME/.local/bin:$PATH"
