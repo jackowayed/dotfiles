@@ -1,0 +1,10 @@
+# Merge into ~/.codex/config.toml; keep only one [tui] table.
+[tui]
+status_line = [
+  "model-with-reasoning",
+  "context-used",
+  "current-dir",
+  "git-branch",
+  "five-hour-limit",
+  "weekly-limit",
+]
