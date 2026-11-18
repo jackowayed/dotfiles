@@ -99,3 +99,4 @@ fi
 [[ -r ~/.zshprivate ]] && source ~/.zshprivate
 export PATH="$HOME/.local/bin:$PATH"
 export NPM_CONFIG_MIN_RELEASE_AGE=7
+eval "$(fnm env --use-on-cd --shell zsh)"
